@@ -363,6 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # etc
-MRPA_Logo_NoText_v1.png
-Logo.svg
+/MRPA_Logo_NoText_v1.png
 /Logo.svg
