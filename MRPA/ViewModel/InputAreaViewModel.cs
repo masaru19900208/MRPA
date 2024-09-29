@@ -113,8 +113,8 @@
         {
             string? pastCommand = command;
             pastCommand ??= _dataManager.GetExistingCommandByOrder(order);
-            int pastDelay = delay ?? _dataManager.GetExistingDelayByOrder(order);
-            int pastRepetition = repetition ?? _dataManager.GetExistingRepetitionByOrder(order);
+            int pastDelay = delay ?? _dataManager.GetExistingDataByOrder(order, isRepetition: false);
+            int pastRepetition = repetition ?? _dataManager.GetExistingDataByOrder(order, isRepetition: true);
             List<Byte> pastCmdByte = cmdByte ?? _dataManager.GetExistingCmdByteByOrder(order);
             return new SettingsData.Commands()
             {

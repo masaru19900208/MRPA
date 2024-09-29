@@ -112,28 +112,31 @@ namespace MRPA
             return currentCommand;
         }
 
-        // TODO もうちょい共通化するリファクタリング
-        public int GetExistingRepetitionByOrder(int order)
+        /// <summary>
+        /// Get the repetition or delay of the order number data.
+        /// </summary>
+        /// <param name="order">Integer for order number</param>
+        /// <param name="isRepetition">True for repetition, false for delay</param>
+        /// <returns></returns>
+        public int GetExistingDataByOrder(int order, bool isRepetition)
         {
             if (this.commands is null) return 1;
-            int currentRepetition = 1;
-            foreach (var command in this.commands)
+            int currentData = 1;
+            if (isRepetition)
             {
-                if (command.Order == order) currentRepetition = command.Repetition;
+                foreach (var command in this.commands)
+                {
+                    if (command.Order == order) currentData = command.Repetition;
+                }
             }
-            return currentRepetition;
-        }
-
-        // TODO もうちょい共通化するリファクタリング
-        public int GetExistingDelayByOrder(int order)
-        {
-            if (this.commands is null) return 1;
-            int currentDelay = 1;
-            foreach (var command in this.commands)
+            else
             {
-                if (command.Order == order) currentDelay = command.Delay;
+                foreach (var command in this.commands)
+                {
+                    if (command.Order == order) currentData = command.Delay;
+                }
             }
-            return currentDelay;
+            return currentData;
         }
 
         public List<Byte> GetExistingCmdByteByOrder(int order)
