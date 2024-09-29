@@ -243,13 +243,21 @@
 
         private void OnChangeTextBox(object? sender, EventArgs e)
         {
-            // TODO リファクタリング
             int nextNewOrder = 0;
             if (sender is null) return;
             TextBox textBox = (TextBox)sender;
             if (textBox.Name.Contains("exe")) return;
-            // TODO 正しく動かない=>動いてるわ。ただしリファクタリング必要
-            if (_dataManager.commands!.Count(x => x.Order == textBox.Tag as int?) <= 1 && _dataManager.commands!.Count(x => x.Order == (int)textBox.Tag! + 1) < 1)
+            if (!int.TryParse(textBox.Tag?.ToString(), out int tagNumber))
+            {
+                ConsoleManager.LogError("The tag contains a value other than an integer.");
+                return;
+            }
+            if (_dataManager.commands is null)
+            {
+                ConsoleManager.LogError("Json data is null.");
+                return;
+            }
+            if (!_dataManager.commands.Any(data => data.Order == tagNumber + 1))
             {
                 if (int.TryParse(textBox.Tag!.ToString(), out nextNewOrder)) nextNewOrder++;
                 AddNewLine(nextNewOrder);
