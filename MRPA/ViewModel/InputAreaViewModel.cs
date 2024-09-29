@@ -41,8 +41,6 @@
         public void OnKeyDownTextBox(object? sender, KeyEventArgs e)
         {
             string currentKeyStr;
-            //e.SuppressKeyPress = true;
-            //e.Handled = true;
 
             if (sender is null) return;
             TextBox textBox = (TextBox)sender;
@@ -69,33 +67,39 @@
         {
             if (sender is null) return;
             TextBox textBox = (TextBox)sender;
-            if (int.TryParse(textBox.Tag?.ToString(), out int tagNumber))
+            if (!int.TryParse(textBox.Tag?.ToString(), out int tagNumber))
             {
-                if (keysCodeByte.Count > 0)
+                ConsoleManager.LogError("The tag contains a value other than an integer.");
+                return;
+            }
+            if (_dataManager.commands is null)
+            {
+                ConsoleManager.LogError("Json data is null.");
+                return;
+            }
+            if (keysCodeByte.Count > 0)
+            {
+                if (!textBox.Name.Contains("exe"))
                 {
-                    if (!textBox.Name.Contains("exe"))
+                    _dataManager.UpdateJsonData(commands: [GenerateExistingData(tagNumber, cmdByte: keysCodeByte, command: textBox.Text)]);
+                    if (!_dataManager.commands.Any(data => data.Order == tagNumber + 1))
                     {
-                        _dataManager.UpdateJsonData(commands: [GenerateExistingData(tagNumber, cmdByte: keysCodeByte, command: textBox.Text)]);
-                        if (_dataManager.commands?.Where(command => command.Order == tagNumber + 1).Count() == 0)
-                        {
-                            _dataManager.UpdateJsonData(commands: [GenerateNewLineData(tagNumber + 1)]);
-                        }
-                    }
-                    else
-                    {
-                        // TODO この時に発火しないようにしないと行けない
-                        var currentExeCommand = new SettingsData.ExeCommand
-                        {
-                            ExeCommandByte = keysCodeByte,
-                            ExeCommandStr = textBox.Text,
-                        };
-                        _dataManager.UpdateJsonData(exeCommand: currentExeCommand);
-                        _exeCommandManager.RegisterExeCommand(currentExeCommand);
+                        _dataManager.UpdateJsonData(commands: [GenerateNewLineData(tagNumber + 1)]);
                     }
                 }
-                keysCodeByte.Clear();
-                keysStr.Clear();
+                else
+                {
+                    var currentExeCommand = new SettingsData.ExeCommand
+                    {
+                        ExeCommandByte = keysCodeByte,
+                        ExeCommandStr = textBox.Text,
+                    };
+                    _dataManager.UpdateJsonData(exeCommand: currentExeCommand);
+                    _exeCommandManager.RegisterExeCommand(currentExeCommand);
+                }
             }
+            keysCodeByte.Clear();
+            keysStr.Clear();
         }
 
         public SettingsData.Commands GenerateNewLineData(int order)
