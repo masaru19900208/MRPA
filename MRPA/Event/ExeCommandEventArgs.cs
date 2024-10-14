@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MRPA
+﻿namespace MRPA
 {
-    public interface IExeCommandEventArgs
+    public class ExeCommandEventArgs : EventArgs
     {
-        void OnExeCommandOccur(object sender, EventArgs e);
+        public string Message { get; }
+
+        public ExeCommandEventArgs(string message)
+        {
+            Message = message;
+        }
     }
 }

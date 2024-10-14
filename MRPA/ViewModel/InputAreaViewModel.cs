@@ -1,16 +1,18 @@
 ﻿namespace MRPA
 {
-    internal class InputAreaViewModel : IExeCommandEventArgs
+    internal class InputAreaViewModel
     {
         private readonly DataManager _dataManager;
         private readonly InputAreaModel _inputAreaModel;
         private readonly ExeCommandManager _exeCommandManager;
+        public event EventHandler<ExeCommandEventArgs>? OnExeCommandOccurred;
 
         public InputAreaViewModel(DataManager dataManager, InputAreaModel inputAreaModel, Form mainForm)
         {
             _inputAreaModel = inputAreaModel;
             _dataManager = dataManager;
             _exeCommandManager = new ExeCommandManager(1, mainForm, this);
+            _exeCommandManager.OnExeCommandOccurred += (sender, message) => OnExeCommandOccur(sender, message);
         }
 
         public int GetMaxOrder()
@@ -149,7 +151,7 @@
             _exeCommandManager.RegisterExeCommand(exeCommand);
         }
 
-        public async void OnExeCommandOccur(object? sender, EventArgs e)
+        public async void OnExeCommandOccur(object? sender, EventArgs message)
         {
             if (_dataManager.commands is null) return;
             await MacroManager.StartMacro(_dataManager.commands, _dataManager.allCommandRepetition);

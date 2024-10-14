@@ -5,6 +5,7 @@ namespace MRPA
     internal partial class ExeCommandManager
     {
         //private readonly IExeCommandEventArgs? _exeCommandEventArgs;
+        public event EventHandler<ExeCommandEventArgs>? OnExeCommandOccurred;
         private const int WM_HOTKEY = 0x0312;
         private readonly int _hotkeyId;
         private IntPtr _windowHandle;
@@ -48,10 +49,10 @@ namespace MRPA
             _window.ReleaseHandle();
         }
 
-        private class MessageWindow(ExeCommandManager manager, IExeCommandEventArgs exeListener) : NativeWindow
+        private class MessageWindow(ExeCommandManager manager) : NativeWindow
         {
             private readonly ExeCommandManager _manager = manager;
-            private readonly IExeCommandEventArgs _exeListener = exeListener;
+            public event EventHandler<ExeCommandEventArgs>? OnExeCommandOccurred;
 
             protected override void WndProc(ref Message m)
             {
@@ -60,7 +61,7 @@ namespace MRPA
                     int id = m.WParam.ToInt32();
                     if (id == _manager._hotkeyId)
                     {
-                        _exeListener.OnExeCommandOccur(this, EventArgs.Empty);
+                        OnExeCommandOccurred?.Invoke(this, new ExeCommandEventArgs("exeCommand occur"));
                     }
                 }
                 base.WndProc(ref m);
