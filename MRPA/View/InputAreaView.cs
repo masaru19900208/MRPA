@@ -25,7 +25,7 @@
             {
                 SyncDataView();
                 _mainForm.Controls.Add(GenerateExecutionTextBox());
-                _mainForm.Controls.Add(GenerateAllCommandRepetitionComboBox());
+                _mainForm.Controls.Add(GenerateAllCommandRepetitionComboBox(_dataManager.allCommandRepetition));
             }
             catch (Exception ex)
             {
@@ -219,7 +219,7 @@
             return comboBox;
         }
 
-        private ComboBox GenerateAllCommandRepetitionComboBox()
+        private ComboBox GenerateAllCommandRepetitionComboBox(int ExistingAllCommandRepetition)
         {
             ComboBox comboBox = new ComboBox
             {
@@ -232,6 +232,13 @@
                 DataSource = new List<int>(_model.repetitionCountList),
                 Location = new Point(800, 20),
                 Name = "allCommandRepetitionComboBox",
+            };
+            comboBox.BindingContextChanged += (sender, e) =>
+            {
+                if (comboBox.DataSource is not null)
+                {
+                    comboBox.SelectedItem = ExistingAllCommandRepetition;
+                }
             };
             comboBox.SelectedValueChanged += OnChengeAllCommandRepetitionComboBox;
 
