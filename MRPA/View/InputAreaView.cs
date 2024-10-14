@@ -19,8 +19,8 @@
             _mainForm = mainForm;
             _macroPanel = macroPanel;
             _model = new InputAreaModel();
-            dataManager.LoadSettingsData();
-            _viewModel = new InputAreaViewModel(dataManager, _model, _mainForm);
+            _dataManager.LoadSettingsData();
+            _viewModel = new InputAreaViewModel(_dataManager, _model, _mainForm);
             try
             {
                 SyncDataView();
