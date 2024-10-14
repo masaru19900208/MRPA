@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             macroPanel = new FlowLayoutPanel();
             LabelInputMacro = new Label();
             LabelMacroExecutionCommand = new Label();
@@ -117,6 +118,7 @@
             Controls.Add(LabelInputMacro);
             Controls.Add(macroPanel);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             Text = "MRPA";
             Load += MainForm_Load;
