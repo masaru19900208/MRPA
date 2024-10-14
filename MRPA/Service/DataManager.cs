@@ -12,10 +12,10 @@ namespace MRPA
         public List<SettingsData.Commands>? commands;
         public int allCommandRepetition;
 
-        public DataManager(string filePath, SettingsData settingsData)
+        public DataManager(string filePath)
         {
             _jsonFilePath = filePath;
-            _settingsData = settingsData;
+            _settingsData = new SettingsData();
             exeCommand = new SettingsData.ExeCommand
             {
                 ExeCommandStr = "",

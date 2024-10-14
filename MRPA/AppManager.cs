@@ -5,8 +5,7 @@
         public AppManager(MainForm mainForm, FlowLayoutPanel macroPanel, RichTextBox consoleTextBox)
         {
             string jsonFilePath = Path.Combine(AppContext.BaseDirectory, "settings.json");
-            SettingsData settingsData = new SettingsData();
-            DataManager dataManager = new DataManager(jsonFilePath, settingsData);
+            DataManager dataManager = new DataManager(jsonFilePath);
             ConsoleManager.Initialization(consoleTextBox);
 
             if (!File.Exists(jsonFilePath))
