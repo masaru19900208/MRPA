@@ -199,14 +199,14 @@
                 comboBox.DataSource = new List<int>(_model.repetitionCountList);
                 comboBox.Location = new Point(400, 30);
                 comboBox.Name = _model.baseRepetitionComboBox + order;
-                comboBox.SelectedValueChanged += OnChengeComboBox;
+                comboBox.SelectedValueChanged += OnChengeDelayOrRepetitionComboBox;
             }
             else
             {
                 comboBox.DataSource = new List<int>(_model.delayTimeList);
                 comboBox.Location = new Point(230, 65);
                 comboBox.Name = _model.baseDelayComboBoxName + order;
-                comboBox.SelectedValueChanged += OnChengeComboBox;
+                comboBox.SelectedValueChanged += OnChengeDelayOrRepetitionComboBox;
             }
 
             comboBox.BindingContextChanged += (sender, e) =>
@@ -284,7 +284,7 @@
             }
         }
 
-        private void OnChengeComboBox(object? sender, EventArgs e)
+        private void OnChengeDelayOrRepetitionComboBox(object? sender, EventArgs e)
         {
             if (sender is null) return;
             ComboBox comboBox = (ComboBox)sender;
