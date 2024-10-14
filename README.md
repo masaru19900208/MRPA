@@ -25,6 +25,8 @@
 
 ## Class diagram
 
+I created a class diagram after implementing the code and realized that I hadn’t followed the MVVM pattern. I'm quite shocked.
+
 ```mermaid
 ---
 title: MRPA Class Diagram
