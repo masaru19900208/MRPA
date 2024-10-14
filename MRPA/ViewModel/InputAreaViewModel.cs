@@ -3,13 +3,11 @@
     internal class InputAreaViewModel
     {
         private readonly DataManager _dataManager;
-        private readonly InputAreaModel _inputAreaModel;
         private readonly ExeCommandManager _exeCommandManager;
         public event EventHandler<ExeCommandEventArgs>? OnExeCommandOccurred;
 
-        public InputAreaViewModel(DataManager dataManager, InputAreaModel inputAreaModel, Form mainForm)
+        public InputAreaViewModel(DataManager dataManager, Form mainForm)
         {
-            _inputAreaModel = inputAreaModel;
             _dataManager = dataManager;
             _exeCommandManager = ExeCommandManager.Instance;
             _exeCommandManager.Initialize(mainForm);

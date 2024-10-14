@@ -20,7 +20,7 @@
             _macroPanel = macroPanel;
             _model = new InputAreaModel();
             _dataManager.LoadSettingsData();
-            _viewModel = new InputAreaViewModel(_dataManager, _model, _mainForm);
+            _viewModel = new InputAreaViewModel(_dataManager, _mainForm);
             try
             {
                 SyncDataView();
