@@ -25,7 +25,108 @@
 
 ## Class diagram
 
-- I'll put it up eventually.
+```mermaid
+---
+title: MRPA Class Diagram
+---
+classDiagram
+note "Private items have been omitted."
+  class Program
+  class AppManager
+  namespace class SettingsData {
+    class SettingsData{
+      +string LastUpdate
+      +ExeCommand exeCommand
+      +int AllCommandRepetition
+      +List~Commands~ commands
+    }
+    class ExeCommand{
+      +string ExeCommandStr
+      +List~byte~ ExeCommandByte
+    }
+    class Commands{
+      +string Command
+      +int Delay
+      +int Repetition
+      +int Order
+      +List~byte~ CmdByte
+    }
+  }
+  class DataManager{
+    -SettingsData _settingsData
+    +string lastUpdate
+    +SettingsData.ExeCommand exeCommand
+    +List~SettingsData.Commands~ commands
+    +int allCommandRepetition
+    +GetJsonDataString()
+    +BuildSettingsJsonFile()
+    +LoadSettingsData()
+    +UpdateJsonData()
+    +UpdateThisCommands()
+    +GetExistingCommandByOrder()
+    +GetExistingDataByOrder()
+    +GetExistingCmdByteByOrder() List~byte~
+  }
+  class InputAreaView{
+    +ClearMacroPanel()
+  }
+  class InputAreaModel{
+    +string baseTextBoxName
+    +string baseDelayComboBoxName
+    +string baseRepetitionComboBox
+    +List~int~ delayTimeList
+    +List~int~ repetitionCountList
+    +enum inputAreaItem
+  }
+  class InputAreaViewModel{
+    +EventHandler~ExeCommandEventArgs~ OnExeCommandOccurred
+    +GetMaxOrder() int
+    +OnChangeComboBox()
+    +OnChangeAllCommandRepetitionComboBox()
+    +OnKeyDownTextBox()
+    +OnKeyUpTextBox()
+    +GenerateNewLineData() SettingsData.Commands
+    +GenerateExistingData() SettingsData.Commands
+    +OnCloseForm()
+    +InitRegisterExeCommand()
+    +OnExeCommandOccur()
+    +OnClickTrash()
+    +OnClickPlus()
+  }
+  class MacroManager{
+    +StartMacro() Task
+  }
+  class ExeCommandManager{
+    +EventHandler~ExeCommandEventArgs~ OnExeCommandOccurred
+    +Instance() ExeCommandManager
+    +Initialize()
+    +RegisterExeCommand()
+    +RegisterHotKey()
+    +UnregisterHotKey()
+  }
+  class ExeCommandEventArgs{
+    +string Message
+    +ExeCommandEventArgs()
+  }
+  class ConsoleManager{
+    +Initialization() 
+    +LogInfo()
+    +LogError()
+    +ClearConsole()
+  }
+
+  Program --|> AppManager
+  AppManager o-- DataManager
+  DataManager --|> SettingsData
+  AppManager --|> InputAreaView
+  InputAreaView --|> InputAreaModel
+  InputAreaView --|> InputAreaViewModel
+  InputAreaViewModel --|> MacroManager
+  InputAreaViewModel --|> ExeCommandManager
+  EventArgs ..|> ExeCommandEventArgs
+
+
+```
 
 ## Goals of this project
 
