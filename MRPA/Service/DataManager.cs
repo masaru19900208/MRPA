@@ -10,6 +10,7 @@ namespace MRPA
         public string lastUpdate = "";
         public SettingsData.ExeCommand exeCommand;
         public List<SettingsData.Commands>? commands;
+        public int allCommandRepetition;
 
         public DataManager(string filePath, SettingsData settingsData)
         {
@@ -42,10 +43,11 @@ namespace MRPA
                 this.exeCommand.ExeCommandStr = settingsData.exeCommand.ExeCommandStr;
                 this.exeCommand.ExeCommandByte = settingsData.exeCommand.ExeCommandByte;
                 this.commands = settingsData.commands;
+                this.allCommandRepetition = settingsData.AllCommandRepetition;
             }
         }
 
-        public bool UpdateJsonData(SettingsData.ExeCommand? exeCommand = null, List<SettingsData.Commands>? commands = null)
+        public bool UpdateJsonData(SettingsData.ExeCommand? exeCommand = null, List<SettingsData.Commands>? commands = null, int? allCommandRepetition = null)
         {
             try
             {
@@ -60,7 +62,13 @@ namespace MRPA
                 {
                     UpdateThisCommands(commands);
                 }
-                string jsonString = JsonSerializer.Serialize(new { this.lastUpdate, this.exeCommand, this.commands });
+
+                if (allCommandRepetition is not null)
+                {
+                    this.allCommandRepetition = (int)allCommandRepetition;
+                }
+
+                string jsonString = JsonSerializer.Serialize(new { this.lastUpdate, this.exeCommand, this.allCommandRepetition, this.commands });
                 File.WriteAllText(_jsonFilePath, jsonString);
                 LoadSettingsData();
                 return true;

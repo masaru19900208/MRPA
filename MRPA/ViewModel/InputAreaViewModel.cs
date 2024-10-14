@@ -35,6 +35,15 @@
             }
         }
 
+        public void OnChangeAllCommandRepetitionComboBox(ComboBox comboBox, EventArgs e)
+        {
+            if (comboBox.SelectedItem is null) return;
+            if (int.TryParse(comboBox.SelectedItem.ToString(), out int selectedAllCommandRepetition))
+            {
+                _dataManager.UpdateJsonData(allCommandRepetition: selectedAllCommandRepetition);
+            }
+        }
+
         private readonly List<string> keysStr = [];
         private readonly List<Byte> keysCodeByte = [];
 

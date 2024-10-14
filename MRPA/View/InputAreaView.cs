@@ -25,6 +25,7 @@
             {
                 SyncDataView();
                 _mainForm.Controls.Add(GenerateExecutionTextBox());
+                _mainForm.Controls.Add(GenerateAllCommandRepetitionComboBox());
             }
             catch (Exception ex)
             {
@@ -218,6 +219,25 @@
             return comboBox;
         }
 
+        private ComboBox GenerateAllCommandRepetitionComboBox()
+        {
+            ComboBox comboBox = new ComboBox
+            {
+                BackColor = backColor,
+                Font = baseFont,
+                ForeColor = foreColor,
+                FormattingEnabled = true,
+                Size = new Size(70, 30),
+                TabStop = false,
+                DataSource = new List<int>(_model.repetitionCountList),
+                Location = new Point(800, 20),
+                Name = "allCommandRepetitionComboBox",
+            };
+            comboBox.SelectedValueChanged += OnChengeAllCommandRepetitionComboBox;
+
+            return comboBox;
+        }
+
         private TextBox GenerateExecutionTextBox()
         {
             TextBox executionTextBox = new TextBox
@@ -269,6 +289,13 @@
             if (sender is null) return;
             ComboBox comboBox = (ComboBox)sender;
             _viewModel.OnChangeComboBox(comboBox, e);
+        }
+
+        private void OnChengeAllCommandRepetitionComboBox(object? sender, EventArgs e)
+        {
+            if (sender is null) return;
+            ComboBox comboBox = (ComboBox)sender;
+            _viewModel.OnChangeAllCommandRepetitionComboBox(comboBox, e);
         }
 
         private void OnClickTrash(object? sender, EventArgs e)

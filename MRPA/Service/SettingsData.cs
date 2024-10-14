@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace MRPA
 {
@@ -14,6 +9,9 @@ namespace MRPA
 
         [JsonPropertyName("exeCommand")]
         public ExeCommand? exeCommand { get; set; }
+
+        [JsonPropertyName("allCommandRepetition")]
+        public int AllCommandRepetition { get; set; }
 
         [JsonPropertyName("commands")]
         public List<Commands> commands { get; set; } = new List<Commands>();
