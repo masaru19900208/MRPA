@@ -64,24 +64,16 @@ namespace MRPA
         [LibraryImport("user32.dll", EntryPoint = "MapVirtualKeyA")]
         public static partial int MapVirtualKey(int wCode, int wMapType);
 
-        static public async Task StartMacro(List<SettingsData.Commands> commands)
+        static public async Task StartMacro(List<SettingsData.Commands> commands, int allCommandRepetition)
         {
             await _semaphore.WaitAsync();
             try
             {
                 await ReadyExecution();
                 ConsoleManager.LogInfo("START", "Start Macro Commands.");
-                for (var i = 1; i <= commands.Count; i++)
+                for (var i = 1; i <= allCommandRepetition; i++)
                 {
-                    var cmd = commands.Where(command => command.Order == i).First();
-                    List<byte> cmdsByteList = GetCorrectOrderList(cmd.CmdByte);
-                    for (var j = 0; j < cmd.Repetition; j++)
-                    {
-                        SimulateKey(cmdsByteList, isKeyDown: true);
-                        SimulateKey(cmdsByteList, isKeyDown: false);
-                        Thread.Sleep(BaseCommandExecutionIntervalMs);
-                    }
-                    await Task.Delay(cmd.Delay);
+                    await ExecutingCommands(commands);
                 }
                 ConsoleManager.LogInfo("FIN", "Completed Macro All Commands.");
             }
@@ -90,6 +82,22 @@ namespace MRPA
                 ConsoleManager.LogError(e.ToString());
             }
             finally { _semaphore.Release(); }
+        }
+
+        static private async Task ExecutingCommands(List<SettingsData.Commands> commands)
+        {
+            for (var i = 1; i <= commands.Count; i++)
+            {
+                var cmd = commands.Where(command => command.Order == i).First();
+                List<byte> cmdsByteList = GetCorrectOrderList(cmd.CmdByte);
+                for (var j = 0; j < cmd.Repetition; j++)
+                {
+                    SimulateKey(cmdsByteList, isKeyDown: true);
+                    SimulateKey(cmdsByteList, isKeyDown: false);
+                    Thread.Sleep(BaseCommandExecutionIntervalMs);
+                }
+                await Task.Delay(cmd.Delay);
+            }
         }
 
         static private uint SimulateKeyPress(byte keyCode)

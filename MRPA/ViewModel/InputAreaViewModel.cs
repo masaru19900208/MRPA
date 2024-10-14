@@ -152,7 +152,7 @@
         public async void OnExeCommandOccur(object? sender, EventArgs e)
         {
             if (_dataManager.commands is null) return;
-            await MacroManager.StartMacro(_dataManager.commands);
+            await MacroManager.StartMacro(_dataManager.commands, _dataManager.allCommandRepetition);
         }
 
         public void OnClickTrash(int clickedOrder)
