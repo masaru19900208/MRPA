@@ -4,14 +4,13 @@ namespace MRPA
 {
     internal partial class ExeCommandManager
     {
-        //private readonly IExeCommandEventArgs? _exeCommandEventArgs;
+        public Form? MainForm { get; private set; }
         public event EventHandler<ExeCommandEventArgs>? OnExeCommandOccurred;
         private const int WM_HOTKEY = 0x0312;
         private readonly int _hotkeyId;
         private IntPtr _windowHandle;
-        private readonly Form _mainForm;
-        private readonly IExeCommandEventArgs _exeListener;
-        private readonly NativeWindow _window;
+        private MessageWindow? _window;
+        private static readonly ExeCommandManager _exeCommandManager = new ExeCommandManager();
 
         [LibraryImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -21,13 +20,32 @@ namespace MRPA
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        public ExeCommandManager(int hotKeyId, Form mainForm, IExeCommandEventArgs exeListener)
+        public static ExeCommandManager Instance
         {
-            _hotkeyId = hotKeyId;
-            _mainForm = mainForm;
-            _exeListener = exeListener;
-            _window = new MessageWindow(this, _exeListener);
-            _window.AssignHandle(_mainForm.Handle);
+            get
+            {
+                return _exeCommandManager;
+            }
+        }
+
+        private ExeCommandManager()
+        {
+            _hotkeyId = 1;
+        }
+
+        public void Initialize(Form mainForm)
+        {
+            if (MainForm is null)
+            {
+                MainForm = mainForm;
+                _window = new MessageWindow(this);
+                _window.AssignHandle(MainForm.Handle);
+                _window.OnExeCommandOccurred += (sender, message) => OnExeCommandOccurred?.Invoke(sender, message);
+            }
+            else
+            {
+                ConsoleManager.LogError("Already initialized.");
+            }
         }
 
         public void RegisterExeCommand(SettingsData.ExeCommand exeCommand)
@@ -39,12 +57,14 @@ namespace MRPA
 
         public void RegisterHotKey(uint registerModifiers, uint registerKey)
         {
+            if (_window is null) return;
             _windowHandle = IntPtr.Zero;
             RegisterHotKey(_window.Handle, _hotkeyId, registerModifiers, registerKey);
         }
 
         public void UnregisterHotKey()
         {
+            if (_window is null) return;
             UnregisterHotKey(_window.Handle, _hotkeyId);
             _window.ReleaseHandle();
         }

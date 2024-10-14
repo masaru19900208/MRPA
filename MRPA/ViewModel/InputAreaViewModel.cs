@@ -11,7 +11,8 @@
         {
             _inputAreaModel = inputAreaModel;
             _dataManager = dataManager;
-            _exeCommandManager = new ExeCommandManager(1, mainForm, this);
+            _exeCommandManager = ExeCommandManager.Instance;
+            _exeCommandManager.Initialize(mainForm);
             _exeCommandManager.OnExeCommandOccurred += (sender, message) => OnExeCommandOccur(sender, message);
         }
 
